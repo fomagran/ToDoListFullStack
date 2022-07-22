@@ -9,12 +9,15 @@
  */
 
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
+import TodoList from './src/Screens/TodoList';
 
 const App = () => {
-  return <View></View>;
+  return (
+    <View>
+      <TodoList></TodoList>
+    </View>
+  );
 };
-
-const styles = StyleSheet.create({});
 
 export default App;
