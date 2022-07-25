@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import {Alert, FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Alert, FlatList, Pressable, Text, View} from 'react-native';
 import ToDo from '../Components/Todo';
 import Icon from 'react-native-vector-icons/Fontisto';
 import AddModal from '../Components/AddModal';
+import {styles} from '../Styles/TodoListStyles';
 
 const TodoList = () => {
   const [todos, setTodos] = useState([
@@ -51,6 +52,7 @@ const TodoList = () => {
   ]);
 
   const [isModalVisible, setModalVisible] = useState(false);
+  const [editIndex, setEditIndex] = useState(-1);
 
   const showEditAlert = (index: number) => {
     Alert.alert(
@@ -64,7 +66,8 @@ const TodoList = () => {
         {
           text: 'OK',
           onPress: () => {
-            console.log('Edit!');
+            setEditIndex(index);
+            setModalVisible(true);
           },
         },
       ],
@@ -119,7 +122,13 @@ const TodoList = () => {
       Alert.alert('Please fill in all the required fields!');
     } else {
       let newTodos = todos;
-      newTodos.push(todo);
+      if (editIndex !== -1) {
+        newTodos[editIndex] = todo;
+        setEditIndex(-1);
+      } else {
+        newTodos.push(todo);
+      }
+
       setTodos(newTodos);
       setModalVisible(false);
     }
@@ -139,7 +148,8 @@ const TodoList = () => {
         isModalVisible={isModalVisible}
         handleClose={handleClose}
         handleSubmit={handleSubmit}
-        nextIndex={todos.length}></AddModal>
+        todo={editIndex !== -1 ? todos[editIndex] : undefined}
+        index={setEditIndex == -1 ? todos.length : editIndex}></AddModal>
       <FlatList
         style={styles.list}
         contentContainerStyle={{paddingBottom: 50}}
@@ -158,28 +168,5 @@ const TodoList = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    height: 50,
-    backgroundColor: 'white',
-  },
-  list: {
-    marginBottom: 100,
-  },
-  plus: {
-    padding: 5,
-    fontSize: 20,
-    fontWeight: 'bold',
-    margin: 10,
-    backgroundColor: 'black',
-    color: 'white',
-    borderRadius: 12.5,
-  },
-});
 
 export default TodoList;
