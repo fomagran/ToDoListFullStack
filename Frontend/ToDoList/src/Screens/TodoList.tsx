@@ -1,13 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Alert,
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  Modal,
-} from 'react-native';
+import {Alert, FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import ToDo from '../Components/Todo';
 import Icon from 'react-native-vector-icons/Fontisto';
 import AddModal from '../Components/AddModal';
@@ -117,6 +109,22 @@ const TodoList = () => {
     setModalVisible(false);
   };
 
+  const handleSubmit = (todo: TodoModel) => {
+    if (
+      todo.author == '' ||
+      todo.title == '' ||
+      todo.content == '' ||
+      todo.priority == -1
+    ) {
+      Alert.alert('Please fill in all the required fields!');
+    } else {
+      let newTodos = todos;
+      newTodos.push(todo);
+      setTodos(newTodos);
+      setModalVisible(false);
+    }
+  };
+
   return (
     <View>
       <View style={styles.header}>
@@ -129,7 +137,9 @@ const TodoList = () => {
       </View>
       <AddModal
         isModalVisible={isModalVisible}
-        handleClose={handleClose}></AddModal>
+        handleClose={handleClose}
+        handleSubmit={handleSubmit}
+        nextIndex={todos.length}></AddModal>
       <FlatList
         style={styles.list}
         contentContainerStyle={{paddingBottom: 50}}

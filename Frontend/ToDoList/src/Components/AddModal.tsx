@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -10,10 +10,27 @@ import {
 
 interface AddModalProps {
   isModalVisible: boolean;
+  nextIndex: number;
   handleClose: () => {};
+  handleSubmit: () => {};
 }
 
 const AddModal: React.FC<AddModalProps> = props => {
+  const [todo, setTodo] = useState<TodoModel>({
+    id: props.nextIndex,
+    author: '',
+    title: '',
+    content: '',
+    priority: -1,
+  });
+
+  const handleInputChange = (key: string, value: string | number) => {
+    setTodo(prevState => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -25,13 +42,42 @@ const AddModal: React.FC<AddModalProps> = props => {
       }}>
       <View style={styles.container}>
         <View style={styles.form}>
-          <TextInput style={styles.input} placeholder="name"></TextInput>
-          <TextInput style={styles.input} placeholder="title"></TextInput>
-          <TextInput style={styles.input} placeholder="content"></TextInput>
-          <TextInput style={styles.input} placeholder="priority"></TextInput>
+          <TextInput
+            onChangeText={text => {
+              handleInputChange('author', text);
+            }}
+            style={styles.input}
+            placeholder="author"></TextInput>
+          <TextInput
+            style={styles.input}
+            placeholder="title"
+            onChangeText={text => {
+              handleInputChange('title', text);
+            }}></TextInput>
+          <TextInput
+            style={styles.input}
+            placeholder="content"
+            onChangeText={text => {
+              handleInputChange('content', text);
+            }}></TextInput>
+          <TextInput
+            style={styles.input}
+            placeholder="priority"
+            onChangeText={text => {
+              handleInputChange('priority', Number(text));
+            }}></TextInput>
           <View style={styles.closeContainer}>
-            <Pressable onPress={() => props.handleClose()}>
-              <Text style={styles.close}> Close </Text>
+            <Pressable
+              onPress={() => {
+                props.handleSubmit(todo);
+              }}>
+              <Text style={styles.button}> Submit </Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                props.handleClose();
+              }}>
+              <Text style={styles.button}> Close </Text>
             </Pressable>
           </View>
         </View>
@@ -62,12 +108,14 @@ const styles = StyleSheet.create({
   },
 
   closeContainer: {
+    flexDirection: 'row',
     marginTop: 20,
+    marginHorizontal: 40,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
 
-  close: {
+  button: {
     width: 100,
     height: 50,
     backgroundColor: 'black',
