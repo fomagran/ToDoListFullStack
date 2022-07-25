@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Fontisto';
 import {styles} from '../Styles/TodoStyles';
 
 interface ToDoProps {
+  index: number;
   todo: TodoModel;
   handleDelete: () => {};
   handleEdit: () => {};
@@ -11,11 +12,11 @@ interface ToDoProps {
 
 const ToDo: React.FC<ToDoProps> = props => {
   const handleDelete = () => {
-    props.handleDelete(props.todo.id);
+    props.handleDelete(props.index);
   };
 
   const handleEdit = () => {
-    props.handleEdit(props.todo.id);
+    props.handleEdit(props.index);
   };
 
   return (

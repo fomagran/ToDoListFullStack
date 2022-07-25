@@ -1,58 +1,24 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Alert, FlatList, Pressable, Text, View} from 'react-native';
 import ToDo from '../Components/Todo';
 import Icon from 'react-native-vector-icons/Fontisto';
 import AddModal from '../Components/AddModal';
 import {styles} from '../Styles/TodoListStyles';
+import {todos as todoDatas} from '../Datas/todos';
 
 const TodoList = () => {
-  const [todos, setTodos] = useState([
-    {
-      id: 0,
-      author: 'foma',
-      title: '하이',
-      content: '안녕하세요 저는 foma입니다.',
-      priority: 0,
-    },
-    {
-      id: 1,
-      author: 'gran',
-      title: '안녕',
-      content: '안녕하세요 저는 gran입니다',
-      priority: 1,
-    },
-    {
-      id: 2,
-      author: 'kalid',
-      title: '헬로',
-      content: '안녕하세요 저는 kalid입니다',
-      priority: 2,
-    },
-    {
-      id: 3,
-      author: 'young',
-      title: '굿바이',
-      content: '안녕하세요 저는 young입니다',
-      priority: 3,
-    },
-    {
-      id: 4,
-      author: 'hoon',
-      title: '헤이',
-      content: '안녕하세요 저는 훈입니다',
-      priority: 4,
-    },
-    {
-      id: 5,
-      author: 'asfd',
-      title: '쥐쥐',
-      content: '안녕하세요 저는 afsd입니다',
-      priority: 5,
-    },
-  ]);
-
+  /** Properties  */
+  const [todos, setTodos] = useState(todoDatas);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [todo, setTodo] = useState<TodoModel>({
+    author: '',
+    title: '',
+    content: '',
+    priority: -1,
+  });
   const [editIndex, setEditIndex] = useState(-1);
+
+  /** Functions  */
 
   const showEditAlert = (index: number) => {
     Alert.alert(
@@ -67,6 +33,7 @@ const TodoList = () => {
           text: 'OK',
           onPress: () => {
             setEditIndex(index);
+            setTodo(todos[index]);
             setModalVisible(true);
           },
         },
@@ -105,6 +72,7 @@ const TodoList = () => {
   };
 
   const handlePlus = () => {
+    setTodo({author: '', title: '', content: '', priority: -1});
     setModalVisible(true);
   };
 
@@ -128,7 +96,6 @@ const TodoList = () => {
       } else {
         newTodos.push(todo);
       }
-
       setTodos(newTodos);
       setModalVisible(false);
     }
@@ -148,16 +115,16 @@ const TodoList = () => {
         isModalVisible={isModalVisible}
         handleClose={handleClose}
         handleSubmit={handleSubmit}
-        todo={editIndex !== -1 ? todos[editIndex] : undefined}
-        index={setEditIndex == -1 ? todos.length : editIndex}></AddModal>
+        todo={todo}></AddModal>
       <FlatList
         style={styles.list}
         contentContainerStyle={{paddingBottom: 50}}
         data={todos}
-        keyExtractor={item => String(item.id)}
+        keyExtractor={item => item.author}
         renderItem={({item, index}) => {
           return (
             <ToDo
+              index={index}
               todo={item}
               handleDelete={handleDelete}
               handleEdit={handleEdit}
