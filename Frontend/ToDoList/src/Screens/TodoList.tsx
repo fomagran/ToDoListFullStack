@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import ToDo from '../Components/Todo';
 import Icon from 'react-native-vector-icons/Fontisto';
+import AddModal from '../Components/AddModal';
 
 const TodoList = () => {
   const [todos, setTodos] = useState([
@@ -62,7 +63,7 @@ const TodoList = () => {
   const showEditAlert = (index: number) => {
     Alert.alert(
       'Edit',
-      'Do you wan to edit?',
+      'Do you want to edit?',
       [
         {
           text: 'Cancel',
@@ -82,7 +83,7 @@ const TodoList = () => {
   const showDeleteAlert = (index: number) => {
     Alert.alert(
       'Delete',
-      'Do you wan to delete?',
+      'Do you want to delete?',
       [
         {
           text: 'Cancel',
@@ -109,9 +110,11 @@ const TodoList = () => {
   };
 
   const handlePlus = () => {
-    console.log('??');
-
     setModalVisible(true);
+  };
+
+  const handleClose = () => {
+    setModalVisible(false);
   };
 
   return (
@@ -124,19 +127,11 @@ const TodoList = () => {
           <Icon name="plus-a" style={styles.plus} />
         </Pressable>
       </View>
-      <Modal
-        animationType="slide"
-        transparent={false}
-        presentationStyle={'formSheet'}
-        visible={isModalVisible}
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}>
-        <Pressable onPress={() => setModalVisible(false)}>
-          <Text> Close </Text>
-        </Pressable>
-      </Modal>
+      <AddModal
+        isModalVisible={isModalVisible}
+        handleClose={handleClose}></AddModal>
       <FlatList
+        style={styles.list}
         contentContainerStyle={{paddingBottom: 50}}
         data={todos}
         keyExtractor={item => String(item.id)}
@@ -162,6 +157,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     backgroundColor: 'white',
+  },
+  list: {
+    marginBottom: 100,
   },
   plus: {
     padding: 5,
