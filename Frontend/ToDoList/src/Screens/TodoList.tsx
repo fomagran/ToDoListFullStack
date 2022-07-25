@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Alert, FlatList, Pressable, Text, View} from 'react-native';
 import ToDo from '../Components/Todo';
 import Icon from 'react-native-vector-icons/Fontisto';
 import AddModal from '../Components/AddModal';
 import {styles} from '../Styles/TodoListStyles';
 import {todos as todoDatas} from '../Datas/todos';
+import Axios from 'axios';
 
 const TodoList = () => {
   /** Properties  */
@@ -19,6 +20,22 @@ const TodoList = () => {
   const [editIndex, setEditIndex] = useState(-1);
 
   /** Functions  */
+
+  const addTodo = (todo: TodoModel) => {
+    Axios.post('http://192.168.111.34:3001/create', todo)
+      .then(() => {
+        console.log('success');
+      })
+      .catch(error => console.log(error));
+  };
+
+  const getTodos = () => {
+    Axios.get('http://192.168.111.34:3001/todos')
+      .then(res => {
+        setTodos(res.data);
+      })
+      .catch(error => console.log(error));
+  };
 
   const showEditAlert = (index: number) => {
     Alert.alert(
@@ -94,10 +111,10 @@ const TodoList = () => {
         newTodos[editIndex] = todo;
         setEditIndex(-1);
       } else {
-        newTodos.push(todo);
+        addTodo(todo);
       }
-      setTodos(newTodos);
       setModalVisible(false);
+      getTodos();
     }
   };
 

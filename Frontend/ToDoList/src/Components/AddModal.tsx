@@ -70,11 +70,14 @@ const AddModal: React.FC<AddModalProps> = props => {
               handleInputChange('content', text);
             }}></TextInput>
           <TextInput
-            value={String(todo.priority)}
+            value={todo.priority !== -1 ? String(todo.priority) : ''}
             style={styles.input}
             placeholder="priority"
             onChangeText={text => {
-              handleInputChange('priority', Number(text));
+              handleInputChange(
+                'priority',
+                isNaN(Number(text)) ? -1 : Number(text),
+              );
             }}></TextInput>
           <View style={styles.closeContainer}>
             <Pressable
