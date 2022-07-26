@@ -1,15 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Alert, FlatList, Pressable, Text, View} from 'react-native';
 import ToDo from '../Components/Todo';
 import Icon from 'react-native-vector-icons/Fontisto';
 import AddModal from '../Components/AddModal';
 import {styles} from '../Styles/TodoListStyles';
-import {todos as todoDatas} from '../Datas/todos';
 import Axios from 'axios';
 
 const TodoList = () => {
   /** Properties  */
-  const [todos, setTodos] = useState(todoDatas);
+  const [todos, setTodos] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [todo, setTodo] = useState<TodoModel>({
     author: '',
@@ -18,6 +17,10 @@ const TodoList = () => {
     priority: -1,
   });
   const [editIndex, setEditIndex] = useState(-1);
+
+  useEffect(() => {
+    getTodos();
+  }, []);
 
   /** Functions  */
 
@@ -32,7 +35,17 @@ const TodoList = () => {
   const getTodos = () => {
     Axios.get('http://192.168.111.34:3001/todos')
       .then(res => {
+        console.log(res.data);
+
         setTodos(res.data);
+      })
+      .catch(error => console.log(error));
+  };
+
+  const editTodo = (todo: TodoModel) => {
+    Axios.put('http://192.168.111.34:3001/todos', todo)
+      .then(res => {
+        console.log('success', res.data);
       })
       .catch(error => console.log(error));
   };
@@ -106,9 +119,8 @@ const TodoList = () => {
     ) {
       Alert.alert('Please fill in all the required fields!');
     } else {
-      let newTodos = todos;
       if (editIndex !== -1) {
-        newTodos[editIndex] = todo;
+        editTodo(todo);
         setEditIndex(-1);
       } else {
         addTodo(todo);
