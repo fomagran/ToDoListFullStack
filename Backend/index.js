@@ -42,6 +42,26 @@ app.get("/todos", (req, res) => {
   });
 });
 
+app.put("/todos", (req, res) => {
+  const todoid = req.body.todoid;
+  const author = req.body.author;
+  const title = req.body.title;
+  const content = req.body.content;
+  const priority = req.body.priority;
+
+  db.query(
+    "UPDATE todolistSystem.todos SET author = ?, title = ?, content = ?, priority = ? WHERE todoid = ?;",
+    [author, title, content, priority, todoid],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(`Inserted values successfully! ${req.body.title}`);
+      }
+    }
+  );
+});
+
 app.listen(3001, () => {
   console.log("Your server is running on port 3001");
 });
