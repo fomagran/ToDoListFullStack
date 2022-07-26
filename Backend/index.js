@@ -56,7 +56,22 @@ app.put("/todos", (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        res.send(`Inserted values successfully! ${req.body.title}`);
+        res.send(`Inserted values successfully!`);
+      }
+    }
+  );
+});
+
+app.delete("/todos/:todoid", (req, res) => {
+  const { todoid } = req.params;
+  db.query(
+    "DELETE FROM todolistSystem.todos WHERE todoid = ?",
+    [todoid],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(`Deleted values successfully!${todoid}`);
       }
     }
   );

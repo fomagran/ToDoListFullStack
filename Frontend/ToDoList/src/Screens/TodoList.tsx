@@ -50,6 +50,15 @@ const TodoList = () => {
       .catch(error => console.log(error));
   };
 
+  const deleteTodo = (id: number) => {
+    Axios.delete(`http://192.168.111.34:3001/todos/${id}`)
+      .then(res => {
+        console.log('success');
+        getTodos();
+      })
+      .catch(error => console.log(error));
+  };
+
   const showEditAlert = (index: number) => {
     Alert.alert(
       'Edit',
@@ -84,8 +93,7 @@ const TodoList = () => {
         {
           text: 'OK',
           onPress: () => {
-            todos.splice(index, 1);
-            setTodos(todos);
+            deleteTodo(todos[index].todoid);
           },
         },
       ],
