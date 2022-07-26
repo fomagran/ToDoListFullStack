@@ -26,8 +26,9 @@ const TodoList = () => {
 
   const addTodo = (todo: TodoModel) => {
     Axios.post('http://192.168.111.34:3001/create', todo)
-      .then(() => {
-        console.log('success');
+      .then(res => {
+        console.log(res.data);
+        getTodos();
       })
       .catch(error => console.log(error));
   };
@@ -35,8 +36,6 @@ const TodoList = () => {
   const getTodos = () => {
     Axios.get('http://192.168.111.34:3001/todos')
       .then(res => {
-        console.log(res.data);
-
         setTodos(res.data);
       })
       .catch(error => console.log(error));
@@ -45,7 +44,7 @@ const TodoList = () => {
   const editTodo = (todo: TodoModel) => {
     Axios.put('http://192.168.111.34:3001/todos', todo)
       .then(res => {
-        console.log('success', res.data);
+        console.log(res.data);
       })
       .catch(error => console.log(error));
   };
@@ -53,7 +52,7 @@ const TodoList = () => {
   const deleteTodo = (id: number) => {
     Axios.delete(`http://192.168.111.34:3001/todos/${id}`)
       .then(res => {
-        console.log('success');
+        console.log(res.data);
         getTodos();
       })
       .catch(error => console.log(error));

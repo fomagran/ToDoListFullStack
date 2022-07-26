@@ -20,7 +20,7 @@ app.post("/create", (req, res) => {
   const priority = req.body.priority;
 
   db.query(
-    "INSERT INTO todolistSystem.todos (author,title,content,priority) VALUES (?,?,?,?)",
+    "INSERT INTO TODOLISTSYSTEM.TODOS (AUTHOR,TITLE,CONTENT,PRIORITY) VALUES (?,?,?,?)",
     [author, title, content, priority],
     (err, result) => {
       if (err) {
@@ -33,11 +33,11 @@ app.post("/create", (req, res) => {
 });
 
 app.get("/todos", (req, res) => {
-  db.query("SELECT * FROM todolistSystem.todos", (err, result) => {
+  db.query("SELECT * FROM TODOLISTSYSTEM.TODOS", (err, result) => {
     if (err) {
       console.log(err);
     } else {
-      res.send(result);
+      res.send(`Selected values successfully!`);
     }
   });
 });
@@ -50,13 +50,13 @@ app.put("/todos", (req, res) => {
   const priority = req.body.priority;
 
   db.query(
-    "UPDATE todolistSystem.todos SET author = ?, title = ?, content = ?, priority = ? WHERE todoid = ?;",
+    "UPDATE TODOLISTSYSTEM.TODOS SET AUTHOR = ?, TITLE = ?, CONTENT = ?, PRIORITY = ? WHERE TODOID = ?;",
     [author, title, content, priority, todoid],
     (err, result) => {
       if (err) {
         console.log(err);
       } else {
-        res.send(`Inserted values successfully!`);
+        res.send(`Updated values successfully!`);
       }
     }
   );
@@ -65,13 +65,13 @@ app.put("/todos", (req, res) => {
 app.delete("/todos/:todoid", (req, res) => {
   const { todoid } = req.params;
   db.query(
-    "DELETE FROM todolistSystem.todos WHERE todoid = ?",
+    "DELETE FROM TODOLISTSYSTEM.TODOS WHERE TODOID = ?",
     [todoid],
     (err, result) => {
       if (err) {
         console.log(err);
       } else {
-        res.send(`Deleted values successfully!${todoid}`);
+        res.send(`Deleted values successfully!`);
       }
     }
   );
