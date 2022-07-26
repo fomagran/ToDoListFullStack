@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Alert, FlatList, Pressable, Text, View} from 'react-native';
+import {Alert, Button, FlatList, Pressable, Text, View} from 'react-native';
 import ToDo from '../Components/Todo';
 import Icon from 'react-native-vector-icons/Fontisto';
 import AddModal from '../Components/AddModal';
@@ -117,6 +117,14 @@ const TodoList = () => {
     setModalVisible(false);
   };
 
+  const handleSort = () => {
+    let sorted = [...todos].sort((a: TodoModel, b: TodoModel) => {
+      return a.priority - b.priority;
+    });
+
+    setTodos(sorted);
+  };
+
   const handleSubmit = (todo: TodoModel) => {
     if (
       todo.author == '' ||
@@ -168,6 +176,9 @@ const TodoList = () => {
           );
         }}
       />
+      <Pressable style={styles.sortContainer} onPress={() => handleSort()}>
+        <Text style={styles.sort}>Sort by priority</Text>
+      </Pressable>
     </View>
   );
 };

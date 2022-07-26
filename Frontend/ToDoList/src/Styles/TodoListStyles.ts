@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   list: {
-    marginBottom: 100,
+    height: '80%',
   },
   plus: {
     padding: 5,
@@ -20,5 +20,17 @@ export const styles = StyleSheet.create({
     backgroundColor: 'black',
     color: 'white',
     borderRadius: 12.5,
+  },
+  sortContainer: {
+    padding: 20,
+    backgroundColor: 'orange',
+    marginHorizontal: 20,
+    marginVertical: 5,
+  },
+  sort: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    color: 'white',
+    fontSize: 20,
   },
 });
